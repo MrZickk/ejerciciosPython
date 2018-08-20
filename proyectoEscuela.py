@@ -7,10 +7,7 @@ class Grupo():
     def __init__(self, nombreG, salon, cupo):
         self.nombreG=nombreG
         self.salon=salon
-        self.cupo=cupo
-        self.espacio=True
-        self.duplicado=False
-        self.duplicadoAlumno=False
+        self.cupo=int(cupo)
         self.materias=[]
         self.alumnos=[]
 
@@ -19,8 +16,7 @@ class Grupo():
         return str_id.format(self.nombreG, self.salon, ", ".join([asignatura.nomAsig for asignatura in self.materias]), len(self.alumnos), self.cupo-len(self.alumnos))
     
     def insertar_materia(self, materia):
-        self.__verificar_duplicados(materia)
-        if self.duplicado==False:
+        if not self._verificar_duplicados(materia):
             self.materias.append(materia)
             print('Materia:', str(materia), 'inscrita')
         else:
@@ -30,19 +26,15 @@ class Grupo():
             self.materias.remove(materia)
             print('Materia;', str(materia), 'removida')
 
-    def __verificar_duplicados(self, materia):
-        tmp=materia
-        for i in self.materias:
-            if i == tmp:
-                self.duplicado=True
-            else:
-                self.duplicado=False
+    def _verificar_duplicados(self, materia):
+        if materia in self.materias:
+            return True
+
+        return False
 
     #valida el cupo y agrega al nuevo alumno
     def insertar_alumno(self, alumno):
-        self.verificar_cupo()
-        self.__verificar_alumnos(alumno)
-        if self.espacio==True and self.duplicadoAlumno==False:
+        if self.verificar_cupo() and not self._alumno_duplicado(alumno):
             self.alumnos.append(alumno)
             print('alumno:',str(alumno), 'agregado')
         else:
@@ -56,23 +48,19 @@ class Grupo():
         for i in self.alumnos:
             print(i)
 
-    def __verificar_alumnos(self, alumno):
-        tmp=alumno
-        for i in self.alumnos:
-            if i ==tmp:
-                self.duplicadoAlumno=True
-            else:
-                self.duplicadoAlumno=False
+    def _alumno_duplicado(self, alumno):
+        if alumno in self.alumnos:
+            return True
+
+        return False
 
     #metodo para validar el cupo en el grupo
     def verificar_cupo(self):
-        cup=self.cupo
-        if cup>len(self.alumnos):
-            self.espacio=True
-            tmp=cup-len(self.alumnos)
-            print("Espacio disponible para: ", tmp, "alumnos")
-        else: 
-            self.espacio=False
+        if self.cupo > len(self.alumnos):
+            print("Espacio disponible para: ", self.cupo-len(self.alumnos), "alumnos")
+            return True
+        
+        return False
 
     def modificar_cupo(self, cupo):
         tmp=self.cupo
@@ -92,14 +80,14 @@ class Asignatura():
 class Alumno():
     def __init__(self, nombre, edad, matricula):
         self.nombre=nombre
-        self.edad=edad
+        self.edad=int(edad)
         self.matricula=matricula
 
     def __str__(self):
         return self.nombre
 
 
-#------------pruebas-------------
+"""#------------NOTAS Y PRUEBAS-------------#
 ciencias=Asignatura("Ciencias")
 mate=Asignatura("Matematicas")
 print("-------------asdfghjkl------------")
@@ -118,7 +106,7 @@ print(g5)
 g5.imprimir_alumnos()
 g5.modificar_cupo(10)
 g5.insertar_alumno(a3)
-print(g5)
+print(g5)"""
 
 
 """no se puede insertar un alumno dos veces, ni materias
@@ -132,5 +120,10 @@ tab != tienen que ser 4 espacios
 nombres de metodos separeados con _
 atribuitos nombres con minusculas
 funciones dentro de clases solo un salto
-clases dos saltos """
+clases dos saltos 
+separar tmp == oasid
+
+
+
+"""
 
