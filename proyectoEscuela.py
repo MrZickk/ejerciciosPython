@@ -16,11 +16,14 @@ class Grupo():
         return str_id.format(self.nombreG, self.salon, ", ".join([asignatura.nomAsig for asignatura in self.materias]), len(self.alumnos), self.cupo-len(self.alumnos))
     
     def insertar_materia(self, materia):
-        if not self._verificar_duplicados(materia):
-            self.materias.append(materia)
-            print('Materia:', str(materia), 'inscrita')
+        if isinstance(materia, Asignatura):
+            if not self._verificar_duplicados(materia):
+                self.materias.append(materia)
+                print('Materia:', str(materia), 'inscrita')
+            else:
+                print('La materia: ',str(materia),'ya se encuentra inscrita')
         else:
-            print('La materia: ',str(materia),'ya se encuentra inscrita')
+            print(str(materia), 'No es una materia')
 
     def eliminar_materia(self, materia):
             self.materias.remove(materia)
@@ -34,11 +37,14 @@ class Grupo():
 
     #valida el cupo y agrega al nuevo alumno
     def insertar_alumno(self, alumno):
-        if self.verificar_cupo() and not self._alumno_duplicado(alumno):
-            self.alumnos.append(alumno)
-            print('alumno:',str(alumno), 'agregado')
+        if isinstance(alumno, Alumno):
+            if self.verificar_cupo() and not self._alumno_duplicado(alumno):
+                self.alumnos.append(alumno)
+                print('alumno:',str(alumno), 'agregado')
+            else:
+                print("El alumno:",str(alumno), "no se ha incrito")
         else:
-            print("El alumno:",str(alumno), "no se ha incrito")
+            print(str(alumno), 'No es un alumno')
 
     def eliminar_alumno(self, alumno):
         self.alumnos.remove(alumno)
@@ -64,7 +70,7 @@ class Grupo():
 
     def modificar_cupo(self, cupo):
         tmp=self.cupo
-        self.cupo=cupo
+        self.cupo = cupo
         print('se ha modificado el cupo del grupo de:', tmp, 'a', self.cupo)
 
 
@@ -86,7 +92,6 @@ class Alumno():
     def __str__(self):
         return self.nombre
 
-
 """#------------NOTAS Y PRUEBAS-------------#
 ciencias=Asignatura("Ciencias")
 mate=Asignatura("Matematicas")
@@ -99,14 +104,14 @@ a2=Alumno("Ruben", 23, 1234567)
 a3=Alumno("Cristo", 27, 234235)
 g5.insertar_alumno(a1)
 g5.insertar_alumno(a2)
-g5.insertar_alumno(a2)
+g5.insertar_alumno(mate)
 g5.verificar_cupo()
 g5.insertar_materia(mate)
-print(g5)
 g5.imprimir_alumnos()
 g5.modificar_cupo(10)
-g5.insertar_alumno(a3)
-print(g5)"""
+g5.insertar_materia(a3)
+print(g5)
+g5.imprimir_alumnos()"""
 
 
 """no se puede insertar un alumno dos veces, ni materias
@@ -122,8 +127,5 @@ atribuitos nombres con minusculas
 funciones dentro de clases solo un salto
 clases dos saltos 
 separar tmp == oasid
-
-
-
 """
 
